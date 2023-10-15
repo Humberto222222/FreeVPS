@@ -13,23 +13,24 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Fazendo as configurações básicas...
         run: |
-          Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-RemoteDesktopServices-Server-Feature
-          Start-Service TermService
-          Set-Service -Name TermService -StartupType 'Automatic'
-          New-LocalUser -Name Humberto -Description "Usuário do Humberto's VPS"
-          Set-LocalUser -Name Humberto -Password (ConvertTo-SecureString -AsPlainText "Humberto@#123" -Force)
-          Add-LocalGroupMember -Group "Administradores" -Member Humberto
-          Get-LocalUser
-          Invoke-WebRequest -Uri "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-386.zip" -OutFile "ngrok.zip"
-          Expand-Archive -Path "ngrok.zip" -DestinationPath "ngrok"
-          Set-LocalUser -Name "Administrator" -Password (ConvertTo-SecureString -AsPlainText "Humberto@#123" -Force)
-          cd ngrok
-          ngrok config add-authtoken 26l2eR5cm1MuLRoKVXkVn3UQzHk_6WzTXhwxmHegKUvQsxwVu
-          ngrok tcp 3389 --region sa &
+           sudo apt update
+           sudo apt update
+           sudo apt install qemu-kvm qemu-utils
+           sudo apt install tigervnc-scraping-server
+           qemu-img create -f qcow2 disk.qcow2 20G
+           wget https://archive.org/download/windows-10-20-h-2_202203/Windows%2010%2021H2.iso
+           mv Windows%2010%2021H2.iso windows.iso
+           nohup qemu-system-x86_64 -cdrom windows.iso -hda disk.qcow2 -m 7024 -vnc :1 -k en-us &
+           curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list && sudo apt update && sudo apt install ngrok
+           ngrok config add-authtoken 26l2eR5cm1MuLRoKVXkVn3UQzHk_6WzTXhwxmHegKUvQsxwVu
+           nohup ngrok tcp --region sa 5901 &
+           
+
+
