@@ -1,0 +1,30 @@
+name: Exemplo de Fluxo de Trabalho
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - name: Configurar Ambiente
+      run: |
+        # Este é um comando do PowerShell que será executado e seu resultado será exibido
+        echo "Iniciando o comando PowerShell..."
+
+        # Execute um comando PowerShell e exiba sua saída
+        $result = Get-Process
+        Write-Host "Resultado do comando PowerShell: $result"
+
+        # Outro comando
+        Write-Host "Executando outro comando..."
+
+        # Mais comandos e saída
+        $variable = "Valor da variável"
+        Write-Host "Variável: $variable"
+      shell: pwsh
+
+    - name: Outro Passo
+      run: |
+        # Outro comando ou etapa
+      shell: pwsh
