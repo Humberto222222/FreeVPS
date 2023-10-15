@@ -28,6 +28,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Fazendo as configurações basicas...
         run: |
+          New-LocalUser -Name Humberto -Description "Usuário do Humberto's VPS" -AccountNeverExpires $true -UserMayNotChangePassword $false
+          Set-LocalUser -Name Humberto -Password (ConvertTo-SecureString -AsPlainText "Humberto@#123" -Force)
+          Add-LocalGroupMember -Group "Administradores" -Member Humberto
           Get-LocalUser
           Invoke-WebRequest -Uri "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-386.zip" -OutFile "ngrok.zip"
           Expand-Archive -Path "ngrok.zip" -DestinationPath "ngrok"
