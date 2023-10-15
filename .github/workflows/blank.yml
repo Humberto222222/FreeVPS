@@ -28,7 +28,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Fazendo as configurações basicas...
         run: |
-          New-LocalUser -Name Humberto -Description "Usuário do Humberto's VPS" -AccountNeverExpires $true -UserMayNotChangePassword $false
+          New-LocalUser -Name Humberto -Description "Usuário do Humberto's VPS"
           Set-LocalUser -Name Humberto -Password (ConvertTo-SecureString -AsPlainText "Humberto@#123" -Force)
           Add-LocalGroupMember -Group "Administradores" -Member Humberto
           Get-LocalUser
