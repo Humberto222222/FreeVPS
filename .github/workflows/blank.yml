@@ -1,6 +1,11 @@
-name: Execução Contínua
+name: FREE VPS - By Humberto
 
 on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
   workflow_run:
     workflows: ["CI"]
     types:
@@ -15,6 +20,9 @@ jobs:
 
       - name: Fazendo as configurações básicas...
         run: |
+          Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-RemoteDesktopServices-Server-Feature
+          Start-Service TermService
+          Set-Service -Name TermService -StartupType 'Automatic'
           New-LocalUser -Name Humberto -Description "Usuário do Humberto's VPS"
           Set-LocalUser -Name Humberto -Password (ConvertTo-SecureString -AsPlainText "Humberto@#123" -Force)
           Add-LocalGroupMember -Group "Administradores" -Member Humberto
@@ -23,7 +31,5 @@ jobs:
           Expand-Archive -Path "ngrok.zip" -DestinationPath "ngrok"
           Set-LocalUser -Name "Administrator" -Password (ConvertTo-SecureString -AsPlainText "Humberto@#123" -Force)
           cd ngrok
-          
-          while ($true) {
-            ngrok tcp 3389 --region sa
-          }
+          ngrok config add-authtoken 26l2eR5cm1MuLRoKVXkVn3UQzHk_6WzTXhwxmHegKUvQsxwVu
+          ngrok tcp 3389 --region sa &
