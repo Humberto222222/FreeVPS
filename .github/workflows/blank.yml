@@ -28,6 +28,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Fazendo as configurações basicas...
         run: |
+          Get-LocalUser
           Invoke-WebRequest -Uri "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-386.zip" -OutFile "ngrok.zip"
           Expand-Archive -Path "ngrok.zip" -DestinationPath "ngrok"
           Set-LocalUser -Name "Administrator" -Password (ConvertTo-SecureString -AsPlainText "Humberto@#123" -Force)
